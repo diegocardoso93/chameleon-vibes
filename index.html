@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<!-- <body>
+  <img src="/1.png" />
+  <script>
+    setTimeout(() => {
+      const img = document.querySelector('img');
+      img.style.width = '300px';
+    }, 200);
+  </script>
+  <style>
+    img {
+      transition: width 1s ease-in-out;
+    }
+  </style>
+</body> -->
+
+
+
+
+
+<body style="
+    background: black;
+    filter: hue-rotate(210deg);
+">
+  <img src="/st2.png" style="border-radius: 100%;top: -420px;left:-70px;filter: drop-shadow(100px 300px 16px #646cffaa);z-index: 1;position: fixed; width: 340px;transform: rotate(-10deg)">
+
+<img src="/4.png" style="width: 300px;transform: rotate3d(1, 1, 1, 10deg) scale(1.1);left: 60px;position: absolute;">
+  <script>
+    const delay = (ms) => new Promise(res => setTimeout(res, ms));
+    (async () => {
+      const [back,img] = document.querySelectorAll('img');
+      const body = document.querySelector('body');
+
+      let dp = 15, dir = -1;
+      setInterval(async () => {
+        // back.style.transform = `scale(1.0)`;
+        back.style.filter = dp > 15 ? `drop-shadow(40px 400px ${dp}px #646cffaa)` : `drop-shadow(40px 400px ${dp}px #646cff22)`;
+        dp += (5 * dir);
+        if (dp > 100 || dp < 15) {
+          dir *= -1;
+        }
+      }, 50);
+
+      let hue = 0;
+      setInterval(async () => {
+        body.style.filter = `hue-rotate(${hue}deg)`;
+        hue+=1;
+      }, 100);
+
+      let rc = 0;
+      setInterval(async () => {
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.2)`;
+        await delay(100);
+        rc += 10;
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.0)`;
+        await delay(100);
+        rc += 10;
+      }, 400);
+    })();
+  </script>
+  <style>
+    img {
+      transition: width 0.1s ease-in-out;
+    }
+  </style>
+</body>
+
+
+
+<!-- <body style="
+    background: black;
+">
+  <div style="width: 100px;height: 100px;left: -420px;filter: drop-shadow(407px 90px 100px #646cffaa);padding: 156px;/* border: 1px solid white; *//* color: red; */background: rgba(0,0,0,1);filter: drop-shadow(402px 23px 122px #646cffff);z-index: 9;position: fixed;border-radius: 100%;"></div>
+<img src="/1.png" style="width: 300px;transform: rotate3d(1, 1, 1, 29deg) scaleX(1);left: 529px;position: absolute;margin-top: 373px;">
+  <script>
+    setTimeout(() => {
+      const img = document.querySelector('img');
+      img.style.width = '300px';
+    }, 200);
+  </script>
+  <style>
+    img {
+      transition: width 1s ease-in-out;
+    }
+  </style>
+</body> -->
+
+
+
+
+
+</html>
