@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+  <style>
+    body {
+      background: black;
+      overflow: hidden;
+    }
+    #btnPlay {
+      margin-top: 400px;
+      border-radius: 100%;
+      background: none;
+      color: antiquewhite;
+      height: 100%;
+      font-size: 28px;
+      padding: 7px 12px;
+      cursor: pointer;
+      border: 0;
+    }
+
+    .card {
+      width: 300px;
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+
+      border-radius: 10px;
+      background-size: cover;
+      position: relative;
+      
+      transition-duration: 30ms;
+      transition-property: transform, box-shadow;
+      transition-timing-function: ease-out;
+      transform: rotate3d(0);
+    }
+
+    .card:hover {
+      scale: 1.1;
+      transition: all 0.2s;
+    }
+
+    .card.active .card__filter:before, .card.active .card__filter:after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      background: linear-gradient(130deg, #3d3d3d00 45%, #9e9bf84d 50%, #3d3d3d00 60%);
+      background-size: 500%;
+      background-position-x: 100%;
+      filter: blur(8px);
+      border-radius: 100px;
+      mix-blend-mode: color-dodge;
+      animation: shimmer 3s infinite linear;
+    }
+
+    @keyframes shimmer {
+      100% {
+        background-position-x: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- preload -->
+<!-- <img src="/st1.png" style="display: none;" />
+<img src="/st2.png" style="display: none;" /> -->
+
+<audio id="audio" style="display: none" controls onplay="javascript:execute()" style="margin-top:400px;">
+  <source src="./b5.mp3" type="audio/mpeg">
+</audio>
+
+<!-- my custom player -->
+<button id="btnPlay" style="margin-top: 400px;margin-left:192px;">
+  <img id="play" src="/play.svg" />
+  <img id="stop" src="/stop.svg" style="display: none" />
+</button>
+
+  <img id="back" src="/st2.png" style="border-radius: 100%;top: -380px;left:-40px;filter: drop-shadow(30px 400px 16px #646cffaa);z-index: 1;position: fixed; width: 340px;transform: rotate(-10deg); display: none;">
+  <!-- <img id="img" src="/2.png" style="top: 40px; width: 300px;transform: rotate3d(1, 1, 1, 0deg) scale(1.1);left: 50px;position: absolute;"> -->
+
+  <div class="card active" style="top: 40px; width: 300px;transform: rotate3d(1, 1, 1, 0deg) scale(1.1);left: 90px;position: absolute;">
+    <div class="card__filter"></div>
+  </div>
+
+  <script>
+
+    const url = new URL(location.href);
+    const params = new URLSearchParams(url.search);
+
+    const qValue = params.get('q');
+    console.log(qValue);
+
+    document.querySelector('.card').style.backgroundImage = `url(/${qValue}.png)`;
+
+    function onPlay() {
+      if (document.querySelector('#audio').paused) {
+        document.querySelector('#play').style.display = 'none';
+        document.querySelector('#stop').style.display = 'block';
+        document.querySelector('#audio').play();
+        isPaused = false;
+      } else {
+        document.querySelector('#play').style.display = 'block';
+        document.querySelector('#stop').style.display = 'none';
+        document.querySelector('#audio').pause();
+        document.querySelector('#audio').load();
+        isPaused = true;
+      }
+    }
+
+    document.querySelector('#btnPlay').onclick = function() {
+      onPlay();
+      console.log('pressed');
+    }
+
+    document.querySelector('#audio').onended = function() {
+      onPlay();
+      runEnd();
+      console.log('ended');
+    }
+
+    const delay = (ms) => new Promise(res => setTimeout(res, ms));
+    const body = document.querySelector('body');
+
+    let ct1, ct2, ct3, rithm;
+    let hue = 0;
+    let rc = 0;
+
+    function runHueEffect() {
+      const back = document.querySelector('#back');
+      back.style.display = 'block';
+      console.log('runHueEffect');
+      ct2 = setInterval(() => {
+        body.style.filter = `hue-rotate(${hue}deg)`;
+        hue += 1;
+      }, 100);
+    }
+    function stopHueEffect() {
+      back.style.display = 'none';
+      clearInterval(ct2);
+      hue = 0;
+    }
+
+    function runBackEffect(cfg) {
+      const back = document.querySelector('#back');
+      let dp = 15, dir = -1;
+      ct1 = setInterval(() => {
+        // back.style.transform = `scale(1.0)`;
+        back.style.filter = dp > 15 ? `drop-shadow(40px 400px ${dp}px #646cffaa)` : `drop-shadow(40px 400px ${dp}px #646cff11)`;
+        dp += (5 * dir);
+        if (dp > 100 || dp < 15) {
+          dir *= -1;
+        }
+      }, cfg);
+    }
+    function stopBackEffect() {
+      clearInterval(ct1);
+    }
+
+    function runRithm() {
+      const img = document.querySelector('.card');
+      rithm = setInterval(async () => {
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.1)`;
+        await delay(100);
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.0)`;
+        await delay(100);
+      }, 400);
+    }
+    function stopRithm() {
+      clearInterval(rithm);
+      rc = 0;
+    }
+
+    function tickBass(cfg) {
+      const img = document.querySelector('.card');
+      (async () => {
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.0)`;
+        await delay(cfg);
+        rc += 5;
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.2)`;
+        await delay(cfg);
+        rc += 5;
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.4)`;
+        await delay(cfg);
+        rc += 5;
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.2)`;
+        await delay(cfg);
+        rc += 5;
+        img.style.transform = `rotate3d(1, 1, 1, ${rc%30}deg) scale(1.0)`;
+      })();
+    }
+
+    let isPaused = false;
+    let normalizedVector = [];
+
+    normalizeMP3FromURL('/b5.mp3').then(t => normalizedVector = t);
+
+    async function execute() {
+      console.log('Normalized audio data:', normalizedVector);
+      runHueEffect();
+      runBackEffect(50);
+      runRithm();
+
+      for (let x of normalizedVector) {
+        if (isPaused) break;
+
+        if (x > 76)
+          tickBass(x);
+
+        await delay(96);
+      }
+
+      runEnd();
+    }
+
+    function runEnd() {
+      stopHueEffect();
+      stopBackEffect();
+      stopRithm();
+    }
+
+
+      
+    function convertToRange(value) {
+      // Convert a value from [-1, 1] to [0, 100]
+      return ((value + 1) / 2) * 100;
+    }
+
+    async function normalizeMP3FromURL(mp3Url) {
+
+      const response = await fetch(mp3Url);
+      if (!response.ok) {
+        console.error('Failed to fetch the MP3 file.');
+        return;
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+
+      let smpAt1Ms = [];
+
+      try {
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const sampleRate = audioBuffer.sampleRate;
+
+        // Get the raw audio data from the first channel (mono or stereo)
+        const rawData = audioBuffer.getChannelData(0); 
+
+        // Now normalize the shifted data to a range of 0 to 100
+        const step = (sampleRate/10); // 1 sample by 100ms
+        const normalizedData = new Float32Array(rawData.length/step);
+        for (let i = 0; i < rawData.length/step; i++) {
+          let max = Math.max(...rawData.slice(i*step, (i+1)*step));
+          let min = Math.min(...rawData.slice(i*step, (i+1)*step));
+          let selected = max > Math.abs(min) ? max : min;
+          normalizedData[i] = convertToRange(selected); // Scale to 0-100
+        }
+
+        return normalizedData;
+      } catch (error) {
+        console.error('Error decoding MP3:', error);
+      }
+
+    }
+  </script>
+
+</body>
+
+</html>
