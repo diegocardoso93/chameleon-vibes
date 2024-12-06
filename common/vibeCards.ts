@@ -1,0 +1,98 @@
+
+export type VibeCard = {
+  id: number,
+  image: string,
+  sound: string,
+}
+
+const vibeCards: VibeCard[] = [{
+  id: 1,
+  image: '1.png',
+  sound: 'b1.mp3',
+}, {
+  id: 2,
+  image: '2.png',
+  sound: 'b2.mp3',
+}, {
+  id: 3,
+  image: '3.png',
+  sound: 'b3.mp3',
+}, {
+  id: 4,
+  image: '4.png',
+  sound: 'b4.mp3',
+}, {
+  id: 5,
+  image: '5.png',
+  sound: 'b5.mp3',
+}, {
+  id: 6,
+  image: '6.png',
+  sound: 'b5.mp3',
+}, {
+  id: 7,
+  image: '7.png',
+  sound: 'b5.mp3',
+}, {
+  id: 8,
+  image: '8.png',
+  sound: 'b5.mp3',
+}, {
+  id: 9,
+  image: '9.png',
+  sound: 'b5.mp3',
+}, {
+  id: 10,
+  image: '10.png',
+  sound: 'b5.mp3',
+}, {
+  id: 11,
+  image: '11.png',
+  sound: 'b5.mp3',
+}, {
+  id: 12,
+  image: '12.png',
+  sound: 'b5.mp3',
+}, {
+  id: 13,
+  image: '13.png',
+  sound: 'b5.mp3',
+}, {
+  id: 14,
+  image: '14.png',
+  sound: 'b5.mp3',
+}, {
+  id: 15,
+  image: '15.png',
+  sound: 'b5.mp3',
+}, {
+  id: 16,
+  image: '16.png',
+  sound: 'b5.mp3',
+}, {
+  id: 17,
+  image: '17.png',
+  sound: 'b5.mp3',
+}, {
+  id: 18,
+  image: '18.png',
+  sound: 'b5.mp3',
+}, {
+  id: 19,
+  image: '19.png',
+  sound: 'b5.mp3',
+}, {
+  id: 20,
+  image: '20.png',
+  sound: 'b5.mp3',
+}, {
+  id: 21,
+  image: '21.png',
+  sound: 'b5.mp3',
+}, {
+  id: 22,
+  image: '22.png',
+  sound: 'b5.mp3',
+}];
+
+export default vibeCards;
