@@ -15,3 +15,7 @@ export class SuccessResponse {
     });
   }
 }
+
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export const APP_PUB_KEY = '0.0.5234801';

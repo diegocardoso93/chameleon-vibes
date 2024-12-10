@@ -22,7 +22,7 @@
 import { useData } from 'vike-vue/useData';
 import { Data } from './+data';
 import { onMounted, onUnmounted, ref } from 'vue';
-import { IntervalRef } from '../../common';
+import { IntervalRef, delay } from '../../common';
 
 const data = useData<Data>();
 console.log(data);
@@ -36,8 +36,6 @@ const playRef = ref();
 const stopRef = ref();
 const isPaused = ref();
 
-// const url = new URL(location.href);
-// const params = new URLSearchParams(url.search);
 const BASE_ASSETS = '../../assets';
 
 onMounted(() => {
@@ -69,8 +67,6 @@ function onEnd() {
   runEnd();
   console.log('ended');
 }
-
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 let hueTick: IntervalRef, backTick: IntervalRef, rithmTick: IntervalRef;
 let hue = 0;

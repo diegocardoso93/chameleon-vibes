@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { getConnectedAccountIds, hcInitPromise, hc, startConnection } from '../services/hashconnect';
-import { loadVibeCards } from '../common/vibeCards';
+import { loadVibeCards } from '../common';
 
 const connected = ref<boolean | null>(null);
 

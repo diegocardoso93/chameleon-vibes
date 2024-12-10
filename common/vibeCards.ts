@@ -6,7 +6,7 @@ export type VibeCard = {
   sound: string,
 }
 
-const vibeCards: VibeCard[] = [{
+export const vibeCards: VibeCard[] = [{
   id: 1,
   image: '1.png',
   sound: 'b1.mp3',
@@ -29,71 +29,71 @@ const vibeCards: VibeCard[] = [{
 }, {
   id: 6,
   image: '6.png',
-  sound: 'b5.mp3',
+  sound: 'b6.mp3',
 }, {
   id: 7,
   image: '7.png',
-  sound: 'b5.mp3',
+  sound: 'b7.mp3',
 }, {
   id: 8,
   image: '8.png',
-  sound: 'b5.mp3',
+  sound: 'b8.mp3',
 }, {
   id: 9,
   image: '9.png',
-  sound: 'b5.mp3',
+  sound: 'b9.mp3',
 }, {
   id: 10,
   image: '10.png',
-  sound: 'b5.mp3',
+  sound: 'b10.mp3',
 }, {
   id: 11,
   image: '11.png',
-  sound: 'b5.mp3',
+  sound: 'b11.mp3',
 }, {
   id: 12,
   image: '12.png',
-  sound: 'b5.mp3',
+  sound: 'b12.mp3',
 }, {
   id: 13,
   image: '13.png',
-  sound: 'b5.mp3',
+  sound: 'b13.mp3',
 }, {
   id: 14,
   image: '14.png',
-  sound: 'b5.mp3',
+  sound: 'b14.mp3',
 }, {
   id: 15,
   image: '15.png',
-  sound: 'b5.mp3',
+  sound: 'b15.mp3',
 }, {
   id: 16,
   image: '16.png',
-  sound: 'b5.mp3',
+  sound: 'b16.mp3',
 }, {
   id: 17,
   image: '17.png',
-  sound: 'b5.mp3',
+  sound: 'b17.mp3',
 }, {
   id: 18,
   image: '18.png',
-  sound: 'b5.mp3',
+  sound: 'b18.mp3',
 }, {
   id: 19,
   image: '19.png',
-  sound: 'b5.mp3',
+  sound: 'b19.mp3',
 }, {
   id: 20,
   image: '20.png',
-  sound: 'b5.mp3',
+  sound: 'b20.mp3',
 }, {
   id: 21,
   image: '21.png',
-  sound: 'b5.mp3',
+  sound: 'b21.mp3',
 }, {
   id: 22,
   image: '22.png',
-  sound: 'b5.mp3',
+  sound: 'b22.mp3',
 }];
 
 export async function loadVibeCards() {
@@ -109,5 +109,3 @@ export async function loadVibeCards() {
   const json = await resp.json();
   localStorage.setItem('cards', JSON.stringify(json.cards));
 }
-
-export default vibeCards;

@@ -3,3 +3,13 @@ compatibility_date = "2024-09-29"
 pages_build_output_dir = "./dist/cloudflare"
 compatibility_flags = [ "nodejs_compat_v2" ]
 #workers_dev = true
+
+[[kv_namespaces]]
+# used to cache user transactions / vibe cards user bought
+binding = "DB"
+id = "29672bd510ad48a6971e0d180bfccbb7"
+
+[vars]
+HEDERA_NODE_API_URL = "https://testnet.mirrornode.hedera.com"
+APP_PUB_KEY = "0.0.5234801"
+AES_ECB_KEY = "" # symetric key used to encrypt/decrypt transaction memo 

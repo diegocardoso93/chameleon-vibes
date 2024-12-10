@@ -34,20 +34,18 @@
 import { useData } from 'vike-vue/useData';
 import { Data } from './+data';
 import { ref } from 'vue';
-import vibeCards, { loadVibeCards } from '../../common/vibeCards';
+import { loadVibeCards, vibeCards } from '../../common';
 import { AccountId, Hbar, TransactionId, TransferTransaction } from '@hashgraph/sdk';
 import { executeTransaction, getConnectedAccountIds } from '../../services/hashconnect';
+import { APP_PUB_KEY, delay } from '../../common';
 
 const cards = ref(useData<Data>().cards);
-const appAccountId = '0.0.5234801';
 
 const btnHidden = ref();
 const showChameleon = ref(true);
 const chameleon = ref();
 const showDrawn = ref(false);
 const drawn = ref();
-
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 setInterval(() => {
   cards.value = JSON.parse(localStorage.getItem('cards') || '[]');
@@ -86,20 +84,34 @@ async function buyVibeCard(id: number) {
     return;
   }
 
+  const response = await fetch(`/api/before-buy`, {
+    method: 'post',
+    body: JSON.stringify({ card_id: id, acc_id: fromAccountId }),
+    headers: {'Content-Type': 'application/json'},
+  });
+  const encryptedCardData = await response.json();
+
   const transferTransaction = new TransferTransaction()
     .addHbarTransfer(fromAccountId, new Hbar(-1))
-    .addHbarTransfer(appAccountId, new Hbar(1))
+    .addHbarTransfer(APP_PUB_KEY, new Hbar(1))
     .setNodeAccountIds([AccountId.fromString("0.0.3")])
     .setTransactionId(TransactionId.generate(fromAccountId))
-    .setTransactionMemo(JSON.stringify({ card_id: `${id}` }));
+    .setTransactionMemo(JSON.stringify(encryptedCardData));
   const frozenTransaction = transferTransaction.freeze();
   try {
-    const executeResult = await executeTransaction(
+    const executedResult = await executeTransaction(
       AccountId.fromString(fromAccountId),
       frozenTransaction
     );
-    console.log({ executeResult });
-    setTimeout(() => loadVibeCards(), 3000);
+    console.log({ executedResult });
+
+    await fetch(`/api/after-buy`, {
+      method: 'post',
+      body: JSON.stringify(encryptedCardData),
+      headers: {'Content-Type': 'application/json'},
+    });
+
+    setTimeout(() => loadVibeCards(), 1000);
   } catch(err) {
     console.log(err)
   }
