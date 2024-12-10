@@ -7,11 +7,13 @@
     "type-check": "wrangler types --experimental-include-runtime && tsc"
   },
   "dependencies": {
+    "@hashgraph/sdk": "^2.55.0",
     "@hono/vite-dev-server": "^0.16.0",
     "@universal-middleware/hono": "^0.2.12",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vue/compiler-sfc": "^3.5.12",
     "@vue/server-renderer": "^3.5.12",
+    "hashconnect": "^3.0.13",
     "hono": "^4.6.6",
     "node-fetch": "^3.3.2",
     "unplugin-vue-markdown": "^0.26.2",

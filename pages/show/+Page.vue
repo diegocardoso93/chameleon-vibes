@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { useData } from 'vike-vue/useData';
 import { Data } from './+data';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { IntervalRef } from '../../common';
 
 const data = useData<Data>();
@@ -42,6 +42,10 @@ const BASE_ASSETS = '../../assets';
 
 onMounted(() => {
   cardRef.value.style.backgroundImage = `url(${BASE_ASSETS}/img/${vibeCard.id}.png)`;
+});
+
+onUnmounted(() => {
+  runEnd();
 });
 
 function onPlay() {
@@ -81,7 +85,9 @@ function runHueRotateEffect() {
   }, 100);
 }
 function stopHueRotateEffect() {
-  backgroundImage.value.style.visibility = 'hidden';
+  if (backgroundImage.value) {
+    backgroundImage.value.style.visibility = 'hidden';
+  }
   clearInterval(hueTick);
   hue = 0;
 }
@@ -162,7 +168,7 @@ function runEnd() {
 }
 
 
-  
+
 function convertToRange(value) {
   // Convert a value from [-1, 1] to [0, 100]
   return ((value + 1) / 2) * 100;
@@ -206,7 +212,7 @@ async function normalizeMP3FromURL(mp3Url: string) {
 
 <style scoped>
 #btnPlay {
-  top: 500px;
+  top: 550px;
   border-radius: 100%;
   background: none;
   color: antiquewhite;
@@ -220,7 +226,7 @@ async function normalizeMP3FromURL(mp3Url: string) {
 
 .card-container {
   filter: hue-rotate(0deg);
-  margin-top: -100px;
+  margin-top: -50px;
 }
 
 .card {
@@ -243,11 +249,6 @@ async function normalizeMP3FromURL(mp3Url: string) {
   position: absolute;
 }
 
-.card:hover {
-  scale: 1.1;
-  transition: all 0.2s;
-}
-
 .card.active .card__filter:before, .card.active .card__filter:after {
   content: "";
   position: absolute;
@@ -267,8 +268,8 @@ async function normalizeMP3FromURL(mp3Url: string) {
 
 .background-image {
   border-radius: 100%;
-  top: -300px;
-  left: calc(50vw - 300px);
+  top: -310px;
+  left: calc(50vw - 290px);
   filter: drop-shadow(40px 400px 16px #646cffaa);
   z-index: 1;
   position: relative;

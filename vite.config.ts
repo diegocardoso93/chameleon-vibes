@@ -7,6 +7,9 @@ import adapter from "@hono/vite-dev-server/cloudflare";
 import devServer from "@hono/vite-dev-server";
 
 export default defineConfig({
+  ssr: {
+    noExternal: ['hashconnect']
+  },
   plugins: [
     devServer({
       entry: "hono-entry.ts",

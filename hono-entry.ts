@@ -1,12 +1,13 @@
 import { createHandler } from "@universal-middleware/hono";
 import { Hono } from "hono";
-import { vikeHandler } from "./server/vike-handler";
+import { vikeHandler, listVibeCardsHandler } from "./server/vike-handler";
 import { showHandler } from "./server/render-handler";
 
 const app = new Hono();
 
 
 app.get("/show", createHandler(() => showHandler)());
+app.get("/api/list", createHandler(() => listVibeCardsHandler)());
 
 /**
  * Vike route

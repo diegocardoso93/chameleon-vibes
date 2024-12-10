@@ -6,6 +6,7 @@ import Layout from "../layouts/LayoutDefault.vue";
 // https://vike.dev/config
 
 export default {
+  ssr: false,
   // https://vike.dev/Layout
   Layout,
 

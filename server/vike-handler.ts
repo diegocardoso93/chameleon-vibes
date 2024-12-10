@@ -1,16 +1,32 @@
 import { UniversalHandler } from "@universal-middleware/core";
-import { KVNamespace } from "@cloudflare/workers-types/experimental";
 import { renderPage } from "vike/server";
+import vibeCards from "../common/vibeCards";
+import { SuccessResponse } from "../common";
 
 export const vikeHandler = (async (request, context, runtime: any): Promise<Response> => {
   console.log('vikehandler');
-  const DB = runtime.env.DB;
+  // const accId = request.url.replace(/.*\?accId=/, '');
+
+  // const resp = await fetch(`https://testnet.mirrornode.hedera.com/api/v1/accounts/0.0.5234801`, {
+  //   method: 'GET',
+  //   headers: {},
+  // });
+  // const { transactions } = await resp.json();
+
+  // // '0.0.5234806'
+  // const cardIds = transactions
+  //   .filter(t => t.transfers.some(ts => ts.account == accId && ts.amount <= -100000000))
+  //   .map(t => JSON.parse(atob(t.memo_base64)))
+  //   .map(t => t.card_id);
+  // console.log(cardIds);
+  // const cards = vibeCards.filter(vc => cardIds.includes(''+vc.id));
+  // console.log({cards});
 
   const pageContextInit = {
     ...context,
     urlOriginal: request.url,
     ...runtime,
-    pageData: getListPageData(request, DB),
+    // pageData: { cards },
   };
 
   const pageContext = await renderPage(pageContextInit);
@@ -26,17 +42,25 @@ export const vikeHandler = (async (request, context, runtime: any): Promise<Resp
   });
 }) satisfies UniversalHandler;
 
-async function getListPageData(request: Request, DB: KVNamespace) {
-  console.log('listHandler');
-  const pageData: any = {};
-  const parts = request.url.split('/');
-  const endPart = parts[parts.length-1];
-  if (!endPart || endPart === 'index.pageContext.json') {
-    const last = +(await DB.get('_LAST') || 0);
-    pageData.items = [];
-    for (let x = last; x>0; x--) {
-      pageData.items.push(JSON.parse(await DB.get(`${x}`) || '{}'));
-    }
-  }
-  return pageData;
-}
+
+export const listVibeCardsHandler = (async (request, context, runtime: any): Promise<Response> => {
+  console.log('listVibeCardsHandler');
+  const accId = request.url.replace(/.*\?accId=/, '');
+
+  const resp = await fetch(`https://testnet.mirrornode.hedera.com/api/v1/accounts/0.0.5234801`, {
+    method: 'GET',
+    headers: {},
+  });
+  const { transactions } = await resp.json();
+
+  // '0.0.5234806'
+  const cardIds = transactions
+    .filter(t => t.transfers.some(ts => ts.account == accId && ts.amount <= -100000000))
+    .map(t => JSON.parse(atob(t.memo_base64)))
+    .map(t => t.card_id);
+  console.log(cardIds);
+  const cards = vibeCards.filter(vc => cardIds.includes(''+vc.id));
+  console.log({cards});
+
+  return SuccessResponse.new({ cards });
+}) satisfies UniversalHandler;

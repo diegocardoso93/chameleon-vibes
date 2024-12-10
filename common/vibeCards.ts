@@ -1,3 +1,4 @@
+import { getConnectedAccountIds } from "../services/hashconnect";
 
 export type VibeCard = {
   id: number,
@@ -94,5 +95,19 @@ const vibeCards: VibeCard[] = [{
   image: '22.png',
   sound: 'b5.mp3',
 }];
+
+export async function loadVibeCards() {
+  const fromAccountId = getConnectedAccountIds()[0]?.toString();
+  if (!fromAccountId) {
+    return;
+  }
+  console.log(fromAccountId);
+  const resp = await fetch(`/api/list?accId=${fromAccountId}`, {
+    method: 'GET',
+    headers: {},
+  });
+  const json = await resp.json();
+  localStorage.setItem('cards', JSON.stringify(json.cards));
+}
 
 export default vibeCards;

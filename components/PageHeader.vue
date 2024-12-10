@@ -7,11 +7,22 @@
           Chameleon Vibes&nbsp;
         </h1>
       </a>
+      <template v-if="HashConnectClient">
+        <component :is="HashConnectClient"></component>
+      </template>
     </header>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { defineAsyncComponent, onMounted, ref } from 'vue';
+let HashConnectClient = ref();
+
+onMounted(() => {
+  setTimeout(() => {
+    HashConnectClient.value = defineAsyncComponent(() => import(`./HashConnectClient.vue`));
+  }, 1000);
+});
 </script>
 
 <!-- @TODO -->
@@ -32,6 +43,16 @@
   margin: auto;
   font: 14px 'Poppins', sans-serif;
   align-items: center;
+  width: 100%;
+}
+.header h1 {
+  background-image: linear-gradient(45deg, rgb(254 58 241), rgb(249 214 162));
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 }
 a {
   cursor: pointer;

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
       <div v-if="showChameleon" class="item">
         <div ref="chameleon" class="card active" style="background-image: url(../assets/img/icon.png);">
           <div class="card__filter"></div>
@@ -8,20 +9,18 @@
       </div>
 
       <div v-if="showDrawn" class="item">
+        <button class="btn-purple" @click="retry()">⟳ retry</button>
         <div class="card active" :style="`background-image: url(../assets/img/${drawn.image});`">
           <div class="card__filter"></div>
         </div>
         <button class="btn-purple" @click="buyVibeCard(drawn.id)">buy</button>
-        <!-- <button v-if="finished" @click="playVibeCard()">
-          done! 🎉 click here to play...
-        </button> -->
       </div>
 
   </div>
   <div class="cardlist-area">
     <h1>Vibe Cards ⇩</h1>
     <div class="list">
-      <div class="item" v-for="(item) of items" @click="playVibeCard(item.id)">
+      <div class="item" v-for="(item) of cards" @click="playVibeCard(item.id)">
         <div class="card active" :style="`background-image: url(../assets/img/${item.image});`">
           <div class="card__filter"></div>
         </div>
@@ -35,30 +34,12 @@
 import { useData } from 'vike-vue/useData';
 import { Data } from './+data';
 import { ref } from 'vue';
-import vibeCards from '../../common/vibeCards';
+import vibeCards, { loadVibeCards } from '../../common/vibeCards';
+import { AccountId, Hbar, TransactionId, TransferTransaction } from '@hashgraph/sdk';
+import { executeTransaction, getConnectedAccountIds } from '../../services/hashconnect';
 
-let { items } = useData<Data>();
-items = [{
-  id: 1,
-  image: '1.png',
-}, {
-  id: 2,
-  image: '2.png',
-}, {
-  id: 3,
-  image: '3.png',
-}, {
-  id: 4,
-  image: '4.png',
-}, {
-  id: 5,
-  image: '5.png',
-}, {
-  id: 6,
-  image: '6.png',
-}];
-
-console.log(items);
+const cards = ref(useData<Data>().cards);
+const appAccountId = '0.0.5234801';
 
 const btnHidden = ref();
 const showChameleon = ref(true);
@@ -67,6 +48,10 @@ const showDrawn = ref(false);
 const drawn = ref();
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+setInterval(() => {
+  cards.value = JSON.parse(localStorage.getItem('cards') || '[]');
+}, 500);
 
 async function drawnCard() {
   drawn.value = vibeCards[Math.floor((Math.random() * vibeCards.length))];
@@ -87,8 +72,37 @@ async function drawnCard() {
   showDrawn.value = true;
 }
 
-function buyVibeCard(id: number) {
-// @TODO
+async function retry() {
+  drawn.value = null;
+  btnHidden.value = false;
+  showChameleon.value = true;
+  showDrawn.value = false;
+}
+
+async function buyVibeCard(id: number) {
+  const fromAccountId = getConnectedAccountIds()[0]?.toString();
+  if (!fromAccountId) {
+    alert('Please connect your Hashpack Wallet first.');
+    return;
+  }
+
+  const transferTransaction = new TransferTransaction()
+    .addHbarTransfer(fromAccountId, new Hbar(-1))
+    .addHbarTransfer(appAccountId, new Hbar(1))
+    .setNodeAccountIds([AccountId.fromString("0.0.3")])
+    .setTransactionId(TransactionId.generate(fromAccountId))
+    .setTransactionMemo(JSON.stringify({ card_id: `${id}` }));
+  const frozenTransaction = transferTransaction.freeze();
+  try {
+    const executeResult = await executeTransaction(
+      AccountId.fromString(fromAccountId),
+      frozenTransaction
+    );
+    console.log({ executeResult });
+    setTimeout(() => loadVibeCards(), 3000);
+  } catch(err) {
+    console.log(err)
+  }
 }
 
 function openPlayer(id: number) {
@@ -138,6 +152,8 @@ function playVibeCard(id: number) {
   display: flex;
   align-items: center;
   flex-direction: column;
+  height: 500px;
+  padding-top: 90px;
 }
 
 .card {
@@ -218,7 +234,6 @@ function playVibeCard(id: number) {
   transition: all 0.3s;
 }
 .btn-purple:hover {
-  margin-top: -4px;
   box-shadow: 0 6px 20px 10px #9e9bf84d;
 }
 </style>
