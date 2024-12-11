@@ -99,6 +99,7 @@ export const vibeCards: VibeCard[] = [{
 export async function loadVibeCards() {
   const fromAccountId = getConnectedAccountIds()[0]?.toString();
   if (!fromAccountId) {
+    localStorage.setItem('cards', '[]');
     return;
   }
   console.log(fromAccountId);

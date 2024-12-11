@@ -2,7 +2,7 @@
 
 interface Env {
 	DB: KVNamespace;
-	HEDERA_NODE_API_URL: "";
-	APP_PUB_KEY: "";
-	AES_ECB_KEY: "";
+	HEDERA_NODE_API_URL: "https://testnet.mirrornode.hedera.com";
+	APP_PUB_KEY: "0.0.5234801";
+	AES_ECB_KEY: "b4d26ed3a4b2cffb66429bbc093f3a8f225a39759d4f361ae53950b50f3b9eb4";
 }

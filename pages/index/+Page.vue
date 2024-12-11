@@ -20,11 +20,11 @@
   <div class="cardlist-area">
     <h1>Vibe Cards ⇩</h1>
     <div class="list">
-      <div class="item" v-for="(item) of cards" @click="playVibeCard(item.id)">
+      <div class="item" v-for="(item) of cards">
         <div class="card active" :style="`background-image: url(../assets/img/${item.image});`">
           <div class="card__filter"></div>
         </div>
-        <button class="btn-purple" @click="openPlayer(drawn.id)">play</button>
+        <button class="btn-purple" @click="playVibeCard(item.id)">play</button>
       </div>
     </div>
   </div>
@@ -34,18 +34,19 @@
 import { useData } from 'vike-vue/useData';
 import { Data } from './+data';
 import { ref } from 'vue';
-import { loadVibeCards, vibeCards } from '../../common';
+import { loadVibeCards, delay, vibeCards, APP_PUB_KEY } from '../../common';
 import { AccountId, Hbar, TransactionId, TransferTransaction } from '@hashgraph/sdk';
 import { executeTransaction, getConnectedAccountIds } from '../../services/hashconnect';
-import { APP_PUB_KEY, delay } from '../../common';
 
-const cards = ref(useData<Data>().cards);
+const cards = ref();
 
 const btnHidden = ref();
 const showChameleon = ref(true);
 const chameleon = ref();
 const showDrawn = ref(false);
 const drawn = ref();
+
+setTimeout(() => loadVibeCards(), 3000);
 
 setInterval(() => {
   cards.value = JSON.parse(localStorage.getItem('cards') || '[]');
@@ -89,14 +90,14 @@ async function buyVibeCard(id: number) {
     body: JSON.stringify({ card_id: id, acc_id: fromAccountId }),
     headers: {'Content-Type': 'application/json'},
   });
-  const encryptedCardData = await response.json();
+  const data = await response.json();
 
   const transferTransaction = new TransferTransaction()
     .addHbarTransfer(fromAccountId, new Hbar(-1))
     .addHbarTransfer(APP_PUB_KEY, new Hbar(1))
     .setNodeAccountIds([AccountId.fromString("0.0.3")])
     .setTransactionId(TransactionId.generate(fromAccountId))
-    .setTransactionMemo(JSON.stringify(encryptedCardData));
+    .setTransactionMemo(data.encryptedCardData);
   const frozenTransaction = transferTransaction.freeze();
   try {
     const executedResult = await executeTransaction(
@@ -107,7 +108,7 @@ async function buyVibeCard(id: number) {
 
     await fetch(`/api/after-buy`, {
       method: 'post',
-      body: JSON.stringify(encryptedCardData),
+      body: JSON.stringify(data),
       headers: {'Content-Type': 'application/json'},
     });
 
@@ -117,13 +118,9 @@ async function buyVibeCard(id: number) {
   }
 }
 
-function openPlayer(id: number) {
-  // @todo transaction call
-  location.href = `/show?id=${id}`;
-}
-
 function playVibeCard(id: number) {
-  location.href = `/show?id=${id}`;
+  const accountId = getConnectedAccountIds()[0]?.toString();
+  location.href = `/show?id=${id}&accId=${accountId}`;
 }
 </script>
 

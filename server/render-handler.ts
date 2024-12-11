@@ -6,7 +6,8 @@ export const showHandler = (async (request, context, runtime: any): Promise<Resp
   console.log('showHandler');
   const DB = runtime.env.DB;
 
-  const [, id, accId] = request.url.match(/.*\?id=(\d)&accId=(.*)/) || [];
+  const [, id, accId] = request.url.match(/.*\?id=(\d+)&accId=(.*)/) || [];
+  console.log({id, accId});
   const exists = JSON.parse(await DB.get(accId) || '[]').some(c => c == id);
   let pageData;
   if (exists) {
