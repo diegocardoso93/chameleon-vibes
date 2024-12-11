@@ -2,7 +2,7 @@
   <div class="container">
 
       <div v-if="showChameleon" class="item">
-        <div ref="chameleon" class="card active" style="background-image: url(../assets/img/icon.png);">
+        <div ref="chameleon" class="card active" :style="`background-image: url(${BASE_ASSETS}/img/icon.png);`">
           <div class="card__filter"></div>
         </div>
         <button v-if="!btnHidden" class="btn-purple" @click="drawnCard()">open</button>
@@ -10,7 +10,7 @@
 
       <div v-if="showDrawn" class="item">
         <button class="btn-purple" @click="retry()">⟳ retry</button>
-        <div class="card active" :style="`background-image: url(../assets/img/${drawn.image});`">
+        <div class="card active" :style="`background-image: url(${BASE_ASSETS}/img/${drawn.image});`">
           <div class="card__filter"></div>
         </div>
         <button class="btn-purple" @click="buyVibeCard(drawn.id)">buy</button>
@@ -21,7 +21,7 @@
     <h1>Vibe Cards ⇩</h1>
     <div class="list">
       <div class="item" v-for="(item) of cards">
-        <div class="card active" :style="`background-image: url(../assets/img/${item.image});`">
+        <div class="card active" :style="`background-image: url(${BASE_ASSETS}/img/${item.image});`">
           <div class="card__filter"></div>
         </div>
         <button class="btn-purple" @click="playVibeCard(item.id)">play</button>
@@ -39,12 +39,13 @@ import { AccountId, Hbar, TransactionId, TransferTransaction } from '@hashgraph/
 import { executeTransaction, getConnectedAccountIds } from '../../services/hashconnect';
 
 const cards = ref();
-
 const btnHidden = ref();
 const showChameleon = ref(true);
 const chameleon = ref();
 const showDrawn = ref(false);
 const drawn = ref();
+
+const BASE_ASSETS = '../assets';
 
 setTimeout(() => loadVibeCards(), 3000);
 
@@ -54,7 +55,6 @@ setInterval(() => {
 
 async function drawnCard() {
   drawn.value = vibeCards[Math.floor((Math.random() * vibeCards.length))];
-
   btnHidden.value = true;
   const chameleonEl = chameleon.value;
   chameleonEl.classList.add('openning');

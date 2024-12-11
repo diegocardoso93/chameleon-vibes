@@ -1,7 +1,8 @@
 import { createHandler } from "@universal-middleware/hono";
 import { Hono } from "hono";
-import { vikeHandler, listVibeCardsHandler, generateKeyHandler, afterBuyHandler, beforeBuyHandler } from "./server/vike-handler";
-import { showHandler } from "./server/render-handler";
+import { vikeHandler } from "./server/vike-handler";
+import { listVibeCardsHandler, generateKeyHandler, afterBuyHandler, beforeBuyHandler } from "./server/api-handler";
+import { showHandler } from "./server/show-page-handler";
 
 const app = new Hono();
 

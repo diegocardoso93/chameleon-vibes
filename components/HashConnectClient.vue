@@ -54,7 +54,6 @@ async function changeConnection() {
   border-radius: 6px;
   z-index: 3;
   position: relative;
-
   background-image: linear-gradient(45deg, rgb(254 58 241), rgb(249 214 162));
   background-size: 100%;
   box-shadow: 0 1px #ffffffbf inset;

@@ -1,7 +1,6 @@
 <template>
   <div class="hcontainer">
     <header class="header">
-      <!-- Chameleon Beats -->
       <a href="/">
         <h1>
           Chameleon Vibes&nbsp;
@@ -25,7 +24,6 @@ onMounted(() => {
 });
 </script>
 
-<!-- @TODO -->
 <style scoped>
 .hcontainer {
   width: 100%;
@@ -60,10 +58,5 @@ a {
   color: antiquewhite;
   margin: auto 0;
   display: flex;
-}
-span {
-  font-size: 24px;
-  padding-top: 2px;
-  margin-right: -2px;
 }
 </style>

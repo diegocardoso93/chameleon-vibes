@@ -25,7 +25,6 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { IntervalRef, delay } from '../../common';
 
 const data = useData<Data>();
-console.log(data);
 const { vibeCard } = data;
 
 const cardRef = ref();
@@ -65,7 +64,6 @@ function onPlay() {
 function onEnd() {
   onPlay();
   runEnd();
-  console.log('ended');
 }
 
 let hueTick: IntervalRef, backTick: IntervalRef, rithmTick: IntervalRef;
@@ -74,7 +72,6 @@ let rc = 0;
 
 function runHueRotateEffect() {
   backgroundImage.value.style.visibility = 'visible';
-  console.log('runHueRotateEffect');
   hueTick = setInterval(() => {
     cardContainerRef.value.style.filter = `hue-rotate(${hue}deg)`;
     hue += 1;

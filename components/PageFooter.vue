@@ -37,9 +37,4 @@ h1 {
   font: 13px 'Poppins', sans-serif;
   color: antiquewhite;
 }
-span {
-  font-size: 24px;
-  padding-top: 2px;
-  margin-right: -2px;
-}
 </style>
