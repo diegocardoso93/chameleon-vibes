@@ -1,8 +1,8 @@
 <template>
   <PageHeader />
-  <section class="content">
+  <main class="content">
     <slot />
-  </section>
+  </main>
   <PageFooter />
 </template>
 
