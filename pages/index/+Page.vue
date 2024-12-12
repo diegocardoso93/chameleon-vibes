@@ -1,27 +1,25 @@
 <template>
   <div class="container">
-
-      <div v-if="showChameleon" class="item">
-        <div ref="chameleon" class="card active" :style="`background-image: url(${BASE_ASSETS}/img/icon.png);`">
-          <div class="card__filter"></div>
-        </div>
-        <button v-if="!btnHidden" class="btn-purple" @click="drawnCard()">open</button>
+    <div v-if="showChameleon" class="item">
+      <div ref="chameleon" class="card active" :style="`background-image: url(/img/icon.png);`">
+        <div class="card__filter"></div>
       </div>
-
-      <div v-if="showDrawn" class="item">
-        <button class="btn-purple" @click="retry()">⟳ retry</button>
-        <div class="card active" :style="`background-image: url(${BASE_ASSETS}/img/${drawn.image});`">
-          <div class="card__filter"></div>
-        </div>
-        <button class="btn-purple" @click="buyVibeCard(drawn.id)">buy</button>
+      <button v-if="!btnHidden" class="btn-purple" @click="drawnCard()">open</button>
+    </div>
+    <div v-if="showDrawn" class="item">
+      <button class="btn-purple" @click="retry()">⟳ retry</button>
+      <div class="card active" :style="`background-image: url(/img/${drawn.image});`">
+        <div class="card__filter"></div>
       </div>
-
+      <button class="btn-purple" @click="buyVibeCard(drawn.id)">buy</button>
+    </div>
   </div>
+
   <div class="cardlist-area">
     <h1>Vibe Cards ⇩</h1>
     <div class="list">
       <div class="item" v-for="(item) of cards">
-        <div class="card active" :style="`background-image: url(${BASE_ASSETS}/img/${item.image});`">
+        <div class="card active" :style="`background-image: url(/img/${item.image});`">
           <div class="card__filter"></div>
         </div>
         <button class="btn-purple" @click="playVibeCard(item.id)">play</button>
@@ -31,12 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useData } from 'vike-vue/useData';
-import { Data } from './+data';
 import { ref } from 'vue';
-import { loadVibeCards, delay, vibeCards, APP_PUB_KEY } from '../../common';
 import { AccountId, Hbar, TransactionId, TransferTransaction } from '@hashgraph/sdk';
 import { executeTransaction, getConnectedAccountIds } from '../../services/hashconnect';
+import { loadVibeCards, delay, vibeCards, APP_PUB_KEY } from '../../common';
 
 const cards = ref();
 const btnHidden = ref();
@@ -44,8 +40,6 @@ const showChameleon = ref(true);
 const chameleon = ref();
 const showDrawn = ref(false);
 const drawn = ref();
-
-const BASE_ASSETS = '../assets';
 
 setTimeout(() => loadVibeCards(), 3000);
 
@@ -99,6 +93,7 @@ async function buyVibeCard(id: number) {
     .setTransactionId(TransactionId.generate(fromAccountId))
     .setTransactionMemo(data.encryptedCardData);
   const frozenTransaction = transferTransaction.freeze();
+
   try {
     const executedResult = await executeTransaction(
       AccountId.fromString(fromAccountId),
@@ -238,7 +233,9 @@ function playVibeCard(id: number) {
   z-index: 3;
   position: relative;
 
-  background: radial-gradient(141.42% 141.42% at 100% 0%, #fff6, #fff0), radial-gradient(140.35% 140.35% at 100% 94.74%, #bd34fe, #bd34fe00), radial-gradient(89.94% 89.94% at 18.42% 15.79%, #41d1ff, #41d1ff00);
+  background: radial-gradient(141.42% 141.42% at 100% 0%, #fff6, #fff0),
+    radial-gradient(140.35% 140.35% at 100% 94.74%, #bd34fe, #bd34fe00),
+    radial-gradient(89.94% 89.94% at 18.42% 15.79%, #41d1ff, #41d1ff00);
   box-shadow: 0 1px #ffffffbf inset;
   transition: all 0.3s;
 }

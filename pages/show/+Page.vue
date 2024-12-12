@@ -1,19 +1,19 @@
 <template>
   <section>
     <audio ref="audioRef" id="audio" controls @ended="onEnd" style="margin-top:400px;display: none">
-      <source :src="`${BASE_ASSETS}/sound/${vibeCard.sound}`" type="audio/mpeg">
+      <source :src="`/sound/${vibeCard.sound}`" type="audio/mpeg">
     </audio>
 
     <div ref="cardContainerRef" class="card-container">
       <div ref="cardRef" class="card active">
         <div class="card__filter"></div>
       </div>
-      <img ref="backgroundImage" class="background-image" :src="`${BASE_ASSETS}/img/st2.png`">
+      <img ref="backgroundImage" class="background-image" :src="`/img/st2.png`">
     </div>
 
     <button ref="btnPlay" id="btnPlay" @click="onPlay()">
-      <img ref="playRef" id="play" :src="`${BASE_ASSETS}/img/play.svg`" />
-      <img ref="stopRef" id="stop" :src="`${BASE_ASSETS}/img/stop.svg`" style="display: none" />
+      <img ref="playRef" id="play" :src="`/img/play.svg`" />
+      <img ref="stopRef" id="stop" :src="`/img/stop.svg`" style="display: none" />
     </button>
   </section>
 </template>
@@ -35,10 +35,8 @@ const playRef = ref();
 const stopRef = ref();
 const isPaused = ref();
 
-const BASE_ASSETS = '../../assets';
-
 onMounted(() => {
-  cardRef.value.style.backgroundImage = `url(${BASE_ASSETS}/img/${vibeCard.id}.png)`;
+  cardRef.value.style.backgroundImage = `url(/img/${vibeCard.id}.png)`;
 });
 
 onUnmounted(() => {
@@ -88,7 +86,9 @@ function stopHueRotateEffect() {
 function runBackEffect(ms: number) {
   let dp = 15, dir = -1;
   backTick = setInterval(() => {
-    backgroundImage.value.style.filter = dp > 15 ? `drop-shadow(40px 400px ${dp}px #646cffaa)` : `drop-shadow(40px 400px ${dp}px #646cff11)`;
+    backgroundImage.value.style.filter = dp > 15 ?
+      `drop-shadow(40px 400px ${dp}px #646cffaa)` :
+      `drop-shadow(40px 400px ${dp}px #646cff11)`;
     dp += (5 * dir);
     if (dp > 100 || dp < 15) {
       dir *= -1;
@@ -134,7 +134,7 @@ function tickBass(cfg) {
 
 let normalizedVector = [];
 
-normalizeMP3FromURL(`${BASE_ASSETS}/sound/${vibeCard.sound}`).then(t => normalizedVector = t);
+normalizeMP3FromURL(`/sound/${vibeCard.sound}`).then(t => normalizedVector = t);
 
 async function execute() {
   console.log('Normalized audio data:', normalizedVector);

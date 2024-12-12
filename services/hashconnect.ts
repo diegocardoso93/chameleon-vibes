@@ -8,7 +8,7 @@ export function startConnection() {
   const env = "testnet";
   const appMetadata = {
     name: "Chameleon Vibes",
-    description: "An example HashConnect dApp",
+    description: `Unlock an innovative experience of synchronized music and animations of "Vibe Cards" that respond to the rhythm and mood of the music`,
     icons: [window.location.origin + "/favicon.ico"],
     url: window.location.origin,
   };
