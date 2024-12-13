@@ -3,7 +3,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite build && wrangler pages dev",
-    "deploy": "vite build && wrangler pages deploy --branch=production",
+    "deploy": "vite build && wrangler pages deploy --branch=main",
     "type-check": "wrangler types --experimental-include-runtime && tsc"
   },
   "dependencies": {

@@ -145,10 +145,10 @@ async function execute() {
   for (let x of normalizedVector) {
     if (isPaused.value) break;
 
-    if (x > 76)
+    if (x > 70)
       tickBass(x);
 
-    await delay(96);
+    await delay(97);
   }
 
   runEnd();
