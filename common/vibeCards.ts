@@ -94,6 +94,14 @@ export const vibeCards: VibeCard[] = [{
   id: 22,
   image: '22.png',
   sound: 'b22.mp3',
+}, {
+  id: 23,
+  image: '23.png',
+  sound: 'b23.mp3',
+}, {
+  id: 24,
+  image: '24.png',
+  sound: 'b24.mp3',
 }];
 
 export async function loadVibeCards() {

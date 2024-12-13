@@ -61,7 +61,7 @@ export const beforeBuyHandler = (async (request, context, runtime: any): Promise
 // Check transaction and update DB adding new card to user account
 export const afterBuyHandler = (async (request, context, runtime: any): Promise<Response> => {
   console.log('afterBuyHandler');
-  await delay(2000);
+  await delay(3000);
 
   let { encryptedCardData, iv } = await request.json();
   iv = ivAsArrayBuffer(iv);
@@ -70,12 +70,20 @@ export const afterBuyHandler = (async (request, context, runtime: any): Promise<
   const data = await decryptString(ecb_key, encryptedCardData, iv);
   const [card_id, accId] = data.split(',');
 
-  // get the transaction from app account
-  const resp = await fetch(`${HEDERA_NODE_API_URL}/api/v1/accounts/${APP_PUB_KEY}`, {
-    method: 'GET',
-    headers: {},
-  });
-  const { transactions } = await resp.json();
+  const getAppAccountLastTransactions = async () => {
+    try {
+      // get the transaction from app account
+      const resp = await fetch(`${HEDERA_NODE_API_URL}/api/v1/accounts/${APP_PUB_KEY}`, {
+        method: 'GET',
+        headers: {},
+      });
+      return (await resp.json() as any).transactions;
+    } catch (e) {
+      return await getAppAccountLastTransactions();
+    }
+  }
+
+  const transactions = await getAppAccountLastTransactions();
 
   const txdata = transactions
     .find(t => t.transfers.some(ts => ts.account == accId && ts.amount <= -100000000));
